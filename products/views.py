@@ -12,8 +12,6 @@ def products_list(request):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many = True)
         return Response(serializer.data)
-    
-
     elif request.method == 'POST':
         serializer = ProductSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -24,3 +22,15 @@ def products_list(request):
         pass
     elif request.method == 'DELETE':
         pass
+
+@api_view(['GET'])
+def product_detail(request,pk):
+    try:
+        product = Product.objects.get(pk=pk)
+        serializer = ProductSerializer(product);
+        return Response(serializer.data)
+    
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND);
+    
+    
